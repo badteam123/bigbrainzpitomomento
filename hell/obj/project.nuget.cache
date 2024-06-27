@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "7uhIIFQF2xtTTk44Y+EFxINMCxTIA3ym3iKyWRZCcsRg8cRq48uQy2dYNubBWdNjBtU6W6vWYth5arrtb62Z6A==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\ralar\\Documents\\GitHub\\badteam\\MonoGame\\hell\\hell\\hell.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ralar\\.nuget\\packages\\monogame.content.builder.task\\3.8.1.303\\monogame.content.builder.task.3.8.1.303.nupkg.sha512",
+    "C:\\Users\\ralar\\.nuget\\packages\\monogame.framework.desktopgl\\3.8.1.303\\monogame.framework.desktopgl.3.8.1.303.nupkg.sha512"
+  ],
+  "logs": []
+}
