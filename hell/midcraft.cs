@@ -183,7 +183,7 @@ namespace hell {
 
         public void regenerate() {
 
-            foreach (string key in blocks.Keys) {
+            /*foreach (string key in blocks.Keys) {
                 visualBlocks[key] = new List<VisualBlock>();
                 for (int i = 0; i < blocks[key].Count; i++) {
                     visualBlocks[key].Add(new VisualBlock(blocks[key][i].x, blocks[key][i].y, blocks[key][i].z));
@@ -203,7 +203,7 @@ namespace hell {
 
                     } while (!stop);
                 }
-            }
+            }*/
 
             //################################################################################################
 
