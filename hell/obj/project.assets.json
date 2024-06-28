@@ -107,11 +107,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ralar\\Documents\\GitHub\\badteam\\MonoGame\\hell\\hell\\hell.csproj",
+      "projectUniqueName": "C:\\Users\\ralar\\Documents\\GitHub\\bigbrainzpitomomento\\hell\\hell.csproj",
       "projectName": "hell",
-      "projectPath": "C:\\Users\\ralar\\Documents\\GitHub\\badteam\\MonoGame\\hell\\hell\\hell.csproj",
+      "projectPath": "C:\\Users\\ralar\\Documents\\GitHub\\bigbrainzpitomomento\\hell\\hell.csproj",
       "packagesPath": "C:\\Users\\ralar\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ralar\\Documents\\GitHub\\badteam\\MonoGame\\hell\\hell\\obj\\",
+      "outputPath": "C:\\Users\\ralar\\Documents\\GitHub\\bigbrainzpitomomento\\hell\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ralar\\AppData\\Roaming\\NuGet\\NuGet.Config",

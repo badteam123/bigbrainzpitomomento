@@ -4,18 +4,18 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/ralar/Documents/GitHub/badteam/MonoGame/hell/hell/Content/ArialFont.spritefont</File>
-    <File>C:/Users/ralar/Documents/GitHub/badteam/MonoGame/hell/hell/Content/blue_ice.png</File>
-    <File>C:/Users/ralar/Documents/GitHub/badteam/MonoGame/hell/hell/Content/brick.png</File>
-    <File>C:/Users/ralar/Documents/GitHub/badteam/MonoGame/hell/hell/Content/dark_gray.png</File>
-    <File>C:/Users/ralar/Documents/GitHub/badteam/MonoGame/hell/hell/Content/grass.png</File>
-    <File>C:/Users/ralar/Documents/GitHub/badteam/MonoGame/hell/hell/Content/gray.png</File>
-    <File>C:/Users/ralar/Documents/GitHub/badteam/MonoGame/hell/hell/Content/log.png</File>
-    <File>C:/Users/ralar/Documents/GitHub/badteam/MonoGame/hell/hell/Content/orange.png</File>
-    <File>C:/Users/ralar/Documents/GitHub/badteam/MonoGame/hell/hell/Content/purpur_block.png</File>
-    <File>C:/Users/ralar/Documents/GitHub/badteam/MonoGame/hell/hell/Content/reinforceddeepslate.png</File>
-    <File>C:/Users/ralar/Documents/GitHub/badteam/MonoGame/hell/hell/Content/sand.png</File>
-    <File>C:/Users/ralar/Documents/GitHub/badteam/MonoGame/hell/hell/Content/stone.png</File>
+    <File>C:/Users/ralar/Documents/GitHub/bigbrainzpitomomento/hell/Content/ArialFont.spritefont</File>
+    <File>C:/Users/ralar/Documents/GitHub/bigbrainzpitomomento/hell/Content/blue_ice.png</File>
+    <File>C:/Users/ralar/Documents/GitHub/bigbrainzpitomomento/hell/Content/brick.png</File>
+    <File>C:/Users/ralar/Documents/GitHub/bigbrainzpitomomento/hell/Content/dark_gray.png</File>
+    <File>C:/Users/ralar/Documents/GitHub/bigbrainzpitomomento/hell/Content/grass.png</File>
+    <File>C:/Users/ralar/Documents/GitHub/bigbrainzpitomomento/hell/Content/gray.png</File>
+    <File>C:/Users/ralar/Documents/GitHub/bigbrainzpitomomento/hell/Content/log.png</File>
+    <File>C:/Users/ralar/Documents/GitHub/bigbrainzpitomomento/hell/Content/orange.png</File>
+    <File>C:/Users/ralar/Documents/GitHub/bigbrainzpitomomento/hell/Content/purpur_block.png</File>
+    <File>C:/Users/ralar/Documents/GitHub/bigbrainzpitomomento/hell/Content/reinforceddeepslate.png</File>
+    <File>C:/Users/ralar/Documents/GitHub/bigbrainzpitomomento/hell/Content/sand.png</File>
+    <File>C:/Users/ralar/Documents/GitHub/bigbrainzpitomomento/hell/Content/stone.png</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />

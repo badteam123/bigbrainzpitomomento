@@ -36,6 +36,7 @@ namespace hell {
             vertices = new Dictionary<string, VertexPositionTexture[]>();
             indices = new Dictionary<string, int[]>();
             blocks = new Dictionary<string, List<Block>>();
+            visualBlocks = new Dictionary<string, List<VisualBlock>>();
             player = new Player(new Vector3(0, 0, 0), 1000f);
         }
 
@@ -126,42 +127,41 @@ namespace hell {
             player.onGround = false;
 
             foreach (string key in blocks.Keys) {
-                floorCheck(key, Math.Round(player.x / chunkSize)-1, Math.Round(player.z / chunkSize)-1);
-                floorCheck(key, Math.Round(player.x / chunkSize)-1, Math.Round(player.z / chunkSize));
-                floorCheck(key, Math.Round(player.x / chunkSize)-1, Math.Round(player.z / chunkSize)+1);
-                floorCheck(key, Math.Round(player.x / chunkSize), Math.Round(player.z / chunkSize)-1);
-                floorCheck(key, Math.Round(player.x / chunkSize), Math.Round(player.z / chunkSize));
-                floorCheck(key, Math.Round(player.x / chunkSize), Math.Round(player.z / chunkSize)+1);
-                floorCheck(key, Math.Round(player.x / chunkSize)+1, Math.Round(player.z / chunkSize)-1);
-                floorCheck(key, Math.Round(player.x / chunkSize)+1, Math.Round(player.z / chunkSize));
-                floorCheck(key, Math.Round(player.x / chunkSize)+1, Math.Round(player.z / chunkSize)+1);
+                floorCheck(key, gc(player.x)-1, gc(player.z)-1);
+                floorCheck(key, gc(player.x)-1, gc(player.z));
+                floorCheck(key, gc(player.x)-1, gc(player.z)+1);
+                floorCheck(key, gc(player.x), gc(player.z)-1);
+                floorCheck(key, gc(player.x), gc(player.z));
+                floorCheck(key, gc(player.x), gc(player.z)+1);
+                floorCheck(key, gc(player.x)+1, gc(player.z)-1);
+                floorCheck(key, gc(player.x)+1, gc(player.z));
+                floorCheck(key, gc(player.x)+1, gc(player.z)+1);
             }   
             player.prevVelocity = player.velocity;
             player.nextVelocity = player.velocity;
             player.debugCanStepX = true;
             player.debugCanStepZ = true;
             foreach (string key in blocks.Keys) {
-                
-                wallCheck(key, Math.Round(player.x / chunkSize) - 1, Math.Round(player.z / chunkSize) - 1);
-                wallCheck(key, Math.Round(player.x / chunkSize) - 1, Math.Round(player.z / chunkSize));
-                wallCheck(key, Math.Round(player.x / chunkSize) - 1, Math.Round(player.z / chunkSize) + 1);
-                wallCheck(key, Math.Round(player.x / chunkSize), Math.Round(player.z / chunkSize) - 1);
-                wallCheck(key, Math.Round(player.x / chunkSize), Math.Round(player.z / chunkSize));
-                wallCheck(key, Math.Round(player.x / chunkSize), Math.Round(player.z / chunkSize) + 1);
-                wallCheck(key, Math.Round(player.x / chunkSize) + 1, Math.Round(player.z / chunkSize) - 1);
-                wallCheck(key, Math.Round(player.x / chunkSize) + 1, Math.Round(player.z / chunkSize));
-                wallCheck(key, Math.Round(player.x / chunkSize) + 1, Math.Round(player.z / chunkSize) + 1);
+                wallCheck(key, gc(player.x) - 1, gc(player.z) - 1);
+                wallCheck(key, gc(player.x) - 1, gc(player.z));
+                wallCheck(key, gc(player.x) - 1, gc(player.z) + 1);
+                wallCheck(key, gc(player.x), gc(player.z) - 1);
+                wallCheck(key, gc(player.x), gc(player.z));
+                wallCheck(key, gc(player.x), gc(player.z) + 1);
+                wallCheck(key, gc(player.x) + 1, gc(player.z) - 1);
+                wallCheck(key, gc(player.x) + 1, gc(player.z));
+                wallCheck(key, gc(player.x) + 1, gc(player.z) + 1);
             }
             foreach (string key in blocks.Keys) {
-                stepCheck(key, Math.Round(player.x / chunkSize) - 1, Math.Round(player.z / chunkSize) - 1);
-                stepCheck(key, Math.Round(player.x / chunkSize) - 1, Math.Round(player.z / chunkSize));
-                stepCheck(key, Math.Round(player.x / chunkSize) - 1, Math.Round(player.z / chunkSize) + 1);
-                stepCheck(key, Math.Round(player.x / chunkSize), Math.Round(player.z / chunkSize) - 1);
-                stepCheck(key, Math.Round(player.x / chunkSize), Math.Round(player.z / chunkSize));
-                stepCheck(key, Math.Round(player.x / chunkSize), Math.Round(player.z / chunkSize) + 1);
-                stepCheck(key, Math.Round(player.x / chunkSize) + 1, Math.Round(player.z / chunkSize) - 1);
-                stepCheck(key, Math.Round(player.x / chunkSize) + 1, Math.Round(player.z / chunkSize));
-                stepCheck(key, Math.Round(player.x / chunkSize) + 1, Math.Round(player.z / chunkSize) + 1);
+                stepCheck(key, gc(player.x) - 1, gc(player.z) - 1);
+                stepCheck(key, gc(player.x) - 1, gc(player.z));
+                stepCheck(key, gc(player.x) - 1, gc(player.z) + 1);
+                stepCheck(key, gc(player.x), gc(player.z) - 1);
+                stepCheck(key, gc(player.x), gc(player.z));
+                stepCheck(key, gc(player.x), gc(player.z) + 1);
+                stepCheck(key, gc(player.x) + 1, gc(player.z) - 1);
+                stepCheck(key, gc(player.x) + 1, gc(player.z));
+                stepCheck(key, gc(player.x) + 1, gc(player.z) + 1);
             }
 
             player.velocity = player.nextVelocity;
@@ -181,35 +181,441 @@ namespace hell {
 
         }
 
+        private void addChunk(ref List<int> checks, string key, int x, int z) {
+            if (chunk[key].ContainsKey(x)) {
+                if (chunk[key][x].ContainsKey(z)) {
+                    checks.AddRange(chunk[key][x][z]);
+                }
+            }
+        }
+
+        private int gc(float pos) {
+            return (int)Math.Round(pos / chunkSize);
+        }
+        private int gc(float pos, int off) {
+            return (int)Math.Round(pos / chunkSize) + off;
+        }
+
+        /*
+         * check block make sure availible
+         * get list of blocks in the chunk in next position
+         * then go thru that list and see if beside
+         * if there was one beside then loop again through same logic
+         */
+
+        private bool checkXPos(string key, int b) {
+            if (!visualBlocks[key][b].toDelete) {
+
+                List<int> list = new List<int>();
+
+                addChunk(ref list, key, gc(visualBlocks[key][b].hx + 1), gc(visualBlocks[key][b].z));
+
+                for(int c = 0; c < list.Count; c++) {
+                    if (Math.Round(visualBlocks[key][list[c]].x) == Math.Round(visualBlocks[key][b].hx + 1) && !visualBlocks[key][list[c]].toDelete) {
+                        if (visualBlocks[key][list[c]].y == visualBlocks[key][b].y) {
+                            if (visualBlocks[key][list[c]].z == visualBlocks[key][b].z) {
+                                if (visualBlocks[key][list[c]].dx == 1 && visualBlocks[key][list[c]].dy == 1 && visualBlocks[key][list[c]].dz == 1) {
+                                    visualBlocks[key][b].px = 1;
+                                    visualBlocks[key][list[c]].toDelete = true;
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+            }
+            return false;
+        }
+
+        private bool checkXNeg(string key, int b) {
+            if (!visualBlocks[key][b].toDelete) {
+
+                List<int> list = new List<int>();
+
+                addChunk(ref list, key, gc(visualBlocks[key][b].lx - 1), gc(visualBlocks[key][b].z));
+
+                for (int c = 0; c < list.Count; c++) {
+                    if (Math.Round(visualBlocks[key][list[c]].x) == Math.Round(visualBlocks[key][b].lx - 1) && !visualBlocks[key][list[c]].toDelete) {
+                        if (visualBlocks[key][list[c]].y == visualBlocks[key][b].y) {
+                            if (visualBlocks[key][list[c]].z == visualBlocks[key][b].z) {
+                                if (visualBlocks[key][list[c]].dx == 1 && visualBlocks[key][list[c]].dy == 1 && visualBlocks[key][list[c]].dz == 1) {
+                                    visualBlocks[key][b].nx = 1;
+                                    visualBlocks[key][list[c]].toDelete = true;
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+            return false;
+        }
+
+        private bool checkZPos(string key, int b) {
+            if (!visualBlocks[key][b].toDelete) {
+                List<int> delete = new List<int>();
+                for(float x = visualBlocks[key][b].lx; x <= visualBlocks[key][b].hx; x++) {
+                    for (float y = visualBlocks[key][b].ly; y <= visualBlocks[key][b].hy; y++) {
+
+                        bool found = false;
+
+                        List<int> list = new List<int>();
+
+                        addChunk(ref list, key, gc(x), gc(visualBlocks[key][b].hz + 1));
+
+                        for (int c = 0; c < list.Count; c++) {
+                            if (Math.Round(visualBlocks[key][list[c]].z) == Math.Round(visualBlocks[key][b].hz + 1) && !visualBlocks[key][list[c]].toDelete) {
+                                if (Math.Round(visualBlocks[key][list[c]].y) == Math.Round(y)) {
+                                    if (Math.Round(visualBlocks[key][list[c]].x) == Math.Round(x)) {
+                                        if (visualBlocks[key][list[c]].dx == 1 && visualBlocks[key][list[c]].dy == 1 && visualBlocks[key][list[c]].dz == 1) {
+                                            found = true;
+                                            delete.Add(list[c]);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (!found) {
+                            return false;
+                        }
+
+                    }
+                }
+                visualBlocks[key][b].pz = 1;
+                for(int d = 0; d < delete.Count; d++) {
+                    visualBlocks[key][delete[d]].toDelete = true;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private bool checkZNeg(string key, int b) {
+            if (!visualBlocks[key][b].toDelete) {
+                List<int> delete = new List<int>();
+                for (float x = visualBlocks[key][b].lx; x <= visualBlocks[key][b].hx; x++) {
+                    for (float y = visualBlocks[key][b].ly; y <= visualBlocks[key][b].hy; y++) {
+
+                        bool found = false;
+
+                        List<int> list = new List<int>();
+
+                        addChunk(ref list, key, gc(x), gc(visualBlocks[key][b].lz - 1));
+
+                        for (int c = 0; c < list.Count; c++) {
+                            if (visualBlocks[key][list[c]].z == visualBlocks[key][b].lz - 1 && !visualBlocks[key][list[c]].toDelete) {
+                                if (visualBlocks[key][list[c]].y == y) {
+                                    if (visualBlocks[key][list[c]].x == x) {
+                                        if (visualBlocks[key][list[c]].dx == 1 && visualBlocks[key][list[c]].dy == 1 && visualBlocks[key][list[c]].dz == 1) {
+                                            found = true;
+                                            delete.Add(list[c]);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (!found) {
+                            delete.Clear();
+                            return false;
+                        }
+
+                    }
+                }
+                visualBlocks[key][b].nz = 1;
+                for (int d = 0; d < delete.Count; d++) {
+                    visualBlocks[key][delete[d]].toDelete = true;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private bool checkYPos(string key, int b) {
+            if (!visualBlocks[key][b].toDelete) {
+                List<int> delete = new List<int>();
+                for (float x = visualBlocks[key][b].lx; x <= visualBlocks[key][b].hx; x++) {
+                    for (float z = visualBlocks[key][b].lz; z <= visualBlocks[key][b].hz; z++) {
+
+                        bool found = false;
+
+                        List<int> list = new List<int>();
+
+                        addChunk(ref list, key, gc(x), gc(z));
+
+                        for (int c = 0; c < list.Count; c++) {
+                            if (Math.Round(visualBlocks[key][list[c]].y) == Math.Round(visualBlocks[key][b].hy + 1) && !visualBlocks[key][list[c]].toDelete) {
+                                if (Math.Round(visualBlocks[key][list[c]].z) == Math.Round(z)) {
+                                    if (Math.Round(visualBlocks[key][list[c]].x) == Math.Round(x)) {
+                                        if (visualBlocks[key][list[c]].dx == 1 && visualBlocks[key][list[c]].dy == 1 && visualBlocks[key][list[c]].dz == 1) {
+                                            found = true;
+                                            delete.Add(list[c]);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (!found) {
+                            return false;
+                        }
+
+                    }
+                }
+                visualBlocks[key][b].py = 1;
+                for (int d = 0; d < delete.Count; d++) {
+                    visualBlocks[key][delete[d]].toDelete = true;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private bool checkYNeg(string key, int b) {
+            if (!visualBlocks[key][b].toDelete) {
+                List<int> delete = new List<int>();
+                for (float x = visualBlocks[key][b].lx; x <= visualBlocks[key][b].hx; x++) {
+                    for (float z = visualBlocks[key][b].lz; z <= visualBlocks[key][b].hz; z++) {
+
+                        bool found = false;
+
+                        List<int> list = new List<int>();
+
+                        addChunk(ref list, key, gc(x), gc(z));
+
+                        for (int c = 0; c < list.Count; c++) {
+                            if (Math.Round(visualBlocks[key][list[c]].y) == Math.Round(visualBlocks[key][b].ly - 1) && !visualBlocks[key][list[c]].toDelete) {
+                                if (Math.Round(visualBlocks[key][list[c]].z) == Math.Round(z)) {
+                                    if (Math.Round(visualBlocks[key][list[c]].x) == Math.Round(x)) {
+                                        if (visualBlocks[key][list[c]].dx == 1 && visualBlocks[key][list[c]].dy == 1 && visualBlocks[key][list[c]].dz == 1) {
+                                            found = true;
+                                            delete.Add(list[c]);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (!found) {
+                            return false;
+                        }
+
+                    }
+                }
+                visualBlocks[key][b].ny = 1;
+                for (int d = 0; d < delete.Count; d++) {
+                    visualBlocks[key][delete[d]].toDelete = true;
+                }
+                return true;
+            }
+            return false;
+        }
+
         public void regenerate() {
 
-            /*foreach (string key in blocks.Keys) {
+            int progress = 0;
+
+            foreach (string key in blocks.Keys) {
+
                 visualBlocks[key] = new List<VisualBlock>();
                 for (int i = 0; i < blocks[key].Count; i++) {
                     visualBlocks[key].Add(new VisualBlock(blocks[key][i].x, blocks[key][i].y, blocks[key][i].z));
                 }
 
-                for(int b = visualBlocks[key].Count - 1; b >= 0; b--) {
-                    bool stop = false;
-                    bool stop2 = false;
-                    bool valid = false;
+                Console.Clear();
+                Console.WriteLine("Loading...");
+                Console.CursorLeft = 0;
+                Console.CursorTop = 2;
+                Console.Write("Combining " + key + " blocks");
+
+                for (int b = 0; b < visualBlocks[key].Count; b++) {
+
+                    if(b % 10000 == 0) {
+                        Console.CursorLeft = 0;
+                        Console.CursorTop = 1;
+                        Console.Write((((b / (visualBlocks[key].Count + 0.0f))*(50 / blocks.Keys.Count)) + (100/blocks.Keys.Count)*progress).ToString("0.00") + "%");
+                    }
+
+                    bool doAgain = false;
+
+                    //x+
                     do {
+                        doAgain = false;
+                        doAgain = checkXPos(key, b);
+                    } while (doAgain);
 
-                        //x+
-                        valid = true;
-                        for(int d = (int)visualBlocks[key][b].lx; d <= (int)visualBlocks[key][b].hx; d++) {
+                    //x-
+                    do {
+                        doAgain = false;
+                        doAgain = checkXNeg(key, b);
+                    } while (doAgain);
 
-                        }
+                    //z+
+                    do {
+                        doAgain = false;
+                        doAgain = checkZPos(key, b);
+                    } while (doAgain);
 
-                    } while (!stop);
+                    //z-
+                    do {
+                        doAgain = false;
+                        doAgain = checkZNeg(key, b);
+                    } while (doAgain);
+
+                    //y+
+                    do {
+                        doAgain = false;
+                        doAgain = checkYPos(key, b);
+                    } while (doAgain);
+
+                    //y-
+                    do {
+                        doAgain = false;
+                        doAgain = checkYNeg(key, b);
+                    } while (doAgain);
+
                 }
-            }*/
+
+                Console.Clear();
+                Console.WriteLine("Loading...");
+                Console.CursorLeft = 0;
+                Console.CursorTop = 2;
+                Console.Write("Clearing redundant " + key + " blocks");
+
+                int num = 0;
+                for (int b = visualBlocks[key].Count - 1; b >= 0; b--) {
+                    if (b % 10000 == 0) {
+                        Console.CursorLeft = 0;
+                        Console.CursorTop = 1;
+                        float bruh = (visualBlocks[key].Count - b) / (visualBlocks[key].Count / (50.0f / blocks.Keys.Count));
+                        Console.Write((bruh + (50/blocks.Keys.Count) + ((100/blocks.Keys.Count)*progress)).ToString("0.00") + "%");
+                    }
+                    if (visualBlocks[key][b].toDelete) {
+                        visualBlocks[key].RemoveAt(b);
+                        num++;
+                    }
+                }
+                progress++;
+            }
+
+            Console.Clear();
+            Console.WriteLine("Done!");
 
             //################################################################################################
 
             vertices = new Dictionary<string, VertexPositionTexture[]>();
             indices = new Dictionary<string, int[]>();
 
+            foreach (string key in textures.Keys) {
+                List<Vector3> positions = new List<Vector3>();
+                List<Vector2> UVs = new List<Vector2>();
+                List<int> listIndices = new List<int>();
+
+                for (int b = 0; b < visualBlocks[key].Count; b++) {
+
+                    float dx2 = visualBlocks[key][b].dx / 2f;
+                    float dy2 = visualBlocks[key][b].dy / 2f;
+                    float dz2 = visualBlocks[key][b].dz / 2f;
+                    float dx = visualBlocks[key][b].dx;
+                    float dy = visualBlocks[key][b].dy;
+                    float dz = visualBlocks[key][b].dz;
+
+                    // Back (z-)
+                    positions.Add(new Vector3(visualBlocks[key][b].x - dx2, visualBlocks[key][b].y - dy2, visualBlocks[key][b].z - dz2));
+                    positions.Add(new Vector3(visualBlocks[key][b].x - dx2, visualBlocks[key][b].y + dy2, visualBlocks[key][b].z - dz2));
+                    positions.Add(new Vector3(visualBlocks[key][b].x + dx2, visualBlocks[key][b].y + dy2, visualBlocks[key][b].z - dz2));
+                    positions.Add(new Vector3(visualBlocks[key][b].x + dx2, visualBlocks[key][b].y - dy2, visualBlocks[key][b].z - dz2));
+                    UVs.Add(new Vector2(0, 0));
+                    UVs.Add(new Vector2(0, dy));
+                    UVs.Add(new Vector2(dx, dy));
+                    UVs.Add(new Vector2(dx, 0));
+
+                    // Front (z+)
+                    positions.Add(new Vector3(visualBlocks[key][b].x - dx2, visualBlocks[key][b].y - dy2, visualBlocks[key][b].z + dz2));
+                    positions.Add(new Vector3(visualBlocks[key][b].x - dx2, visualBlocks[key][b].y + dy2, visualBlocks[key][b].z + dz2));
+                    positions.Add(new Vector3(visualBlocks[key][b].x + dx2, visualBlocks[key][b].y + dy2, visualBlocks[key][b].z + dz2));
+                    positions.Add(new Vector3(visualBlocks[key][b].x + dx2, visualBlocks[key][b].y - dy2, visualBlocks[key][b].z + dz2));
+                    UVs.Add(new Vector2(0, 0));
+                    UVs.Add(new Vector2(0, dy));
+                    UVs.Add(new Vector2(dx, dy));
+                    UVs.Add(new Vector2(dx, 0));
+
+                    // Left (x-)
+                    positions.Add(new Vector3(visualBlocks[key][b].x - dx2, visualBlocks[key][b].y + dy2, visualBlocks[key][b].z - dz2));
+                    positions.Add(new Vector3(visualBlocks[key][b].x - dx2, visualBlocks[key][b].y + dy2, visualBlocks[key][b].z + dz2));
+                    positions.Add(new Vector3(visualBlocks[key][b].x - dx2, visualBlocks[key][b].y - dy2, visualBlocks[key][b].z + dz2));
+                    positions.Add(new Vector3(visualBlocks[key][b].x - dx2, visualBlocks[key][b].y - dy2, visualBlocks[key][b].z - dz2));
+                    UVs.Add(new Vector2(dz, dy));
+                    UVs.Add(new Vector2(0, dy));
+                    UVs.Add(new Vector2(0, 0));
+                    UVs.Add(new Vector2(dz, 0));
+
+                    // Right (x+)
+                    positions.Add(new Vector3(visualBlocks[key][b].x + dx2, visualBlocks[key][b].y + dy2, visualBlocks[key][b].z + dz2));
+                    positions.Add(new Vector3(visualBlocks[key][b].x + dx2, visualBlocks[key][b].y + dy2, visualBlocks[key][b].z - dz2));
+                    positions.Add(new Vector3(visualBlocks[key][b].x + dx2, visualBlocks[key][b].y - dy2, visualBlocks[key][b].z - dz2));
+                    positions.Add(new Vector3(visualBlocks[key][b].x + dx2, visualBlocks[key][b].y - dy2, visualBlocks[key][b].z + dz2));
+                    UVs.Add(new Vector2(dz, dy));
+                    UVs.Add(new Vector2(0, dy));
+                    UVs.Add(new Vector2(0, 0));
+                    UVs.Add(new Vector2(dz, 0));
+
+                    // Bottom (y-)
+                    positions.Add(new Vector3(visualBlocks[key][b].x - dx2, visualBlocks[key][b].y - dy2, visualBlocks[key][b].z - dz2));
+                    positions.Add(new Vector3(visualBlocks[key][b].x - dx2, visualBlocks[key][b].y - dy2, visualBlocks[key][b].z + dz2));
+                    positions.Add(new Vector3(visualBlocks[key][b].x + dx2, visualBlocks[key][b].y - dy2, visualBlocks[key][b].z + dz2));
+                    positions.Add(new Vector3(visualBlocks[key][b].x + dx2, visualBlocks[key][b].y - dy2, visualBlocks[key][b].z - dz2));
+                    UVs.Add(new Vector2(0, 0));
+                    UVs.Add(new Vector2(0, dz));
+                    UVs.Add(new Vector2(dx, dz));
+                    UVs.Add(new Vector2(dx, 0));
+
+                    // Top (y+)
+                    positions.Add(new Vector3(visualBlocks[key][b].x - dx2, visualBlocks[key][b].y + dy2, visualBlocks[key][b].z + dz2));
+                    positions.Add(new Vector3(visualBlocks[key][b].x - dx2, visualBlocks[key][b].y + dy2, visualBlocks[key][b].z - dz2));
+                    positions.Add(new Vector3(visualBlocks[key][b].x + dx2, visualBlocks[key][b].y + dy2, visualBlocks[key][b].z - dz2));
+                    positions.Add(new Vector3(visualBlocks[key][b].x + dx2, visualBlocks[key][b].y + dy2, visualBlocks[key][b].z + dz2));
+                    UVs.Add(new Vector2(0, dz));
+                    UVs.Add(new Vector2(0, 0));
+                    UVs.Add(new Vector2(dx, 0));
+                    UVs.Add(new Vector2(dx, dz));
+
+                    // Cube indices
+                    int[] addedIndices;
+
+                    addedIndices = new int[]{
+                        0 + (b*24), 2 + (b*24), 1 + (b*24), 0 + (b*24), 3 + (b*24), 2 + (b*24),       // Front  (z+)
+                        4 + (b*24), 5 + (b*24), 6 + (b*24), 4 + (b*24), 6 + (b*24), 7 + (b*24),       // Back   (z-)
+                        10 + (b*24), 11 + (b*24), 8 + (b*24), 10 + (b*24), 8 + (b*24), 9 + (b*24),    // Left   (x-)
+                        12 + (b*24), 13 + (b*24), 14 + (b*24), 12 + (b*24), 14 + (b*24), 15 + (b*24), // Right  (x+)
+                        16 + (b*24), 18 + (b*24), 19 + (b*24), 16 + (b*24), 17 + (b*24), 18 + (b*24), // Top    (y+)
+                        21 + (b*24), 22 + (b*24), 23 + (b*24), 21 + (b*24), 23 + (b*24), 20 + (b*24)  // Bottom (y-)
+                    };
+                    listIndices.AddRange(addedIndices);
+
+                }
+
+                vertices[key] = new VertexPositionTexture[positions.Count];
+                indices[key] = new int[listIndices.Count];
+
+                for (int i = 0; i < positions.Count; i++) {
+                    vertices[key][i] = new VertexPositionTexture(new Vector3(positions[i].X, positions[i].Y, positions[i].Z), new Vector2(UVs[i].X, UVs[i].Y));
+                }
+
+                for (int i = 0; i < listIndices.Count; i++) {
+                    indices[key][i] = listIndices[i];
+                }
+
+            }
+
+            /*
             foreach (string key in textures.Keys) {
                 List<Vector3> positions = new List<Vector3>();
                 List<Vector2> UVs = new List<Vector2>();
@@ -304,7 +710,8 @@ namespace hell {
                 }
 
             }
-            
+            */
+
         }
 
         public void render() {
@@ -331,7 +738,7 @@ namespace hell {
                 ResourceManager.GraphicsDevice.SamplerStates[0] = new SamplerState { Filter = TextureFilter.Point, AddressU = TextureAddressMode.Wrap, AddressV = TextureAddressMode.Wrap };
                 foreach (var pass in effects[key].CurrentTechnique.Passes) {
                     pass.Apply();
-                    ResourceManager.GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertices[key], 0, vertices[key].Length, indices[key], 0, 12 * (blocks[key].Count));
+                    ResourceManager.GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertices[key], 0, vertices[key].Length, indices[key], 0, 12 * (visualBlocks[key].Count));
                 }
             }
             
@@ -370,56 +777,58 @@ namespace hell {
         public float dx { get; set; }
         public float dy { get; set; }
         public float dz { get; set; }
+        public bool toDelete { get; set; }
 
         public VisualBlock(int x, int y, int z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+            this.x = x + 0.0f;
+            this.y = y + 0.0f;
+            this.z = z + 0.0f;
             this.dx = 1;
             this.dy = 1;
             this.dz = 1;
+            this.toDelete = false;
         }
 
         public int px {
-            set { x += value / 2; dx += value; }
+            set { x += value / 2.0f; dx += value; }
         }
         public int nx {
-            set { x -= value / 2; dx += value; }
+            set { x -= value / 2.0f; dx += value; }
         }
         public int py {
-            set { y += value / 2; dy += value; }
+            set { y += value / 2.0f; dy += value; }
         }
         public int ny {
-            set { y -= value / 2; dy += value; }
+            set { y -= value / 2.0f; dy += value; }
         }
         public int pz {
-            set { z += value / 2; dz += value; }
+            set { z += value / 2.0f; dz += value; }
         }
         public int nz {
-            set { z -= value / 2; dz += value; }
+            set { z -= value / 2.0f; dz += value; }
         }
 
         public float lx {
-            get { return (float)(this.x - (this.dx / 2) + 0.5); }
+            get { return this.x - (this.dx / 2.0f) + 0.5f; }
         }
         public float ly {
-            get { return (float)(this.y - (this.dy / 2) + 0.5); }
+            get { return this.y - (this.dy / 2.0f) + 0.5f; }
         }
         public float lz {
-            get { return (float)(this.z - (this.dz / 2) + 0.5); }
+            get { return this.z - (this.dz / 2.0f) + 0.5f; }
         }
         public float hx {
-            get { return (float)(this.x + (this.dx / 2) - 0.5); }
+            get { return this.x + (this.dx / 2.0f) - 0.5f; }
         }
         public float hy {
-            get { return (float)(this.y + (this.dy / 2) - 0.5); }
+            get { return this.y + (this.dy / 2.0f) - 0.5f; }
         }
         public float hz {
-            get { return (float)(this.z + (this.dz / 2) - 0.5); }
+            get { return this.z + (this.dz / 2.0f) - 0.5f; }
         }
     }
 
-        internal class Block {
+    internal class Block {
 
         public int x { get; set; }
         public int y { get; set; }
