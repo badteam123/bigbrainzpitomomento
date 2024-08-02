@@ -38,7 +38,7 @@ namespace hell {
         private float vertScale = 15f;
         private float threshold = 0.3f;
 
-        private int renderDistance = 200; // 16 - 18 fps on 500 render dist before greedy meshing
+        private int renderDistance = 100; // 16 - 18 fps on 500 render dist before greedy meshing
 
         public Game1() {
             graphics = new GraphicsDeviceManager(this);
@@ -112,7 +112,7 @@ namespace hell {
                                 noise.GetNoise(x * noiseScale, y * noiseScale, (z + 1) * noiseScale) < threshold ||
                                 noise.GetNoise(x * noiseScale, y * noiseScale, (z - 1) * noiseScale) < threshold
                                 ) {
-                                world.addBlock(x, y-150, z, bruh[rand.Next(0,6)]);
+                                world.addBlock(x, y-150, z, bruh[rand.Next(0,2)]);
                             }
                         }
                     }
